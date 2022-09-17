@@ -16,6 +16,50 @@ import { getDataFromStorage } from '../../helpers/storage.helpers';
 import { localStorageKeys } from '../../constants/localStorage.constants';
 import { RoutePaths } from '../../constants/route.constants';
 
+export const AdminControllers = ({
+  toggleEdit,
+  statusId,
+  todoId,
+}: {
+  todoId: number;
+  statusId: number;
+  toggleEdit: () => void;
+}) => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { providePopupSettings } = usePopup();
+
+  const handleStatus = async () => {
+    const tokenFromStorage = getDataFromStorage(localStorageKeys.userToken);
+    if (tokenFromStorage) {
+      const dispatchResponse = await dispatch(editTodoThunk({ id: todoId, statusId: Number(!statusId) }));
+      const { status, message } = (dispatchResponse.payload as IResponse<ITodo | null>) ?? {};
+      const isResponseSuccess = status === ResponseStatus.Success;
+      providePopupSettings({
+        text: message,
+        popupVariant: isResponseSuccess ? RegularPopupVariants.SUCCESS : RegularPopupVariants.ERROR,
+      });
+      return;
+    }
+    providePopupSettings({
+      text: 'You must Login',
+      popupVariant: RegularPopupVariants.ERROR,
+    });
+    navigate(RoutePaths.login);
+  };
+
+  return (
+    <div className="flex flex-row justify-end w-1/3 flex-end">
+      <button type="button" onClick={toggleEdit}>
+        <EditIcon />
+      </button>
+      <button type="button" onClick={handleStatus}>
+        <CheckIcon />
+      </button>
+    </div>
+  );
+};
+
 export default function TodoRow({ data }: { data: ITodo }) {
   const [isEditable, setIsEditable] = useState(false);
   const { user } = useAuth();
@@ -33,7 +77,7 @@ export default function TodoRow({ data }: { data: ITodo }) {
   });
 
   const textStyles = classNames({
-    'px-4 py-2 border-b-0 text-left w-1/3': true,
+    'px-4 py-2 border-b-0 text-left w-1/2': true,
     'text-purple-500': statusId === TodoStatusVariants.inProgress,
     'text-green-500': statusId === TodoStatusVariants.done,
   });
@@ -81,25 +125,8 @@ export default function TodoRow({ data }: { data: ITodo }) {
     const inputValue = e.target.value;
     setContent(inputValue);
   };
-
   const toggleEdit = () => {
     setIsEditable(prev => !prev);
-  };
-
-  const handleStatus = async () => {
-    const tokenFromStorage = getDataFromStorage(localStorageKeys.userToken);
-    if (tokenFromStorage) {
-      const dispatchResponse = await dispatch(editTodoThunk({ id, statusId: Number(!statusId) }));
-      const { status, message } = (dispatchResponse.payload as IResponse<ITodo | null>) ?? {};
-      const isResponseSuccess = status === ResponseStatus.Success;
-      providePopupSettings({
-        text: message,
-        popupVariant: isResponseSuccess ? RegularPopupVariants.SUCCESS : RegularPopupVariants.ERROR,
-      });
-      return;
-    }
-    getAuthError();
-    navigate(RoutePaths.login);
   };
 
   const isUserAdmin = user?.data && user?.data.isAdmin;
@@ -123,34 +150,23 @@ export default function TodoRow({ data }: { data: ITodo }) {
           <p>{TodoStatuses[statusId].text}</p>
         </div>
 
-        {isEditable ? (
-          <div className="w-1/3 overflow-hidden">
-            <p className="text-gray-700"> Todo </p>
+        <div className={textStyles}>
+          <p className="text-gray-700"> Todo </p>
+          {isEditable ? (
             <input
-              className="text-purple-500 border-b focus:outline-none border-b-purple-500"
+              className="block w-full text-purple-500 border-b focus:outline-none border-b-purple-500"
               type="text"
               onChange={handleChange}
               value={content}
               onKeyDown={handleEnterKey}
             />
-          </div>
-        ) : (
-          <div className={textStyles}>
-            <p className="text-gray-700"> Todo </p>
+          ) : (
             <p>{content}</p>
-          </div>
-        )}
-      </div>
-      {isUserAdmin && (
-        <div className="flex flex-row justify-end w-1/3 flex-end">
-          <button type="button" onClick={toggleEdit}>
-            <EditIcon />
-          </button>
-          <button type="button" onClick={handleStatus}>
-            <CheckIcon />
-          </button>
+          )}
         </div>
-      )}
+      </div>
+
+      {isUserAdmin && <AdminControllers todoId={id} statusId={statusId} toggleEdit={toggleEdit} />}
     </div>
   );
 }

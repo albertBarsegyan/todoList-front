@@ -5,9 +5,9 @@ import { patchRequest, postRequest } from '../services/request.service';
 import { SliceStatuses } from '../constants/slice.constants';
 
 import { ITodo, ITodoEditRequest, ITodoRequest, TodoSortOrders } from '../interfaces/todo.interfaces';
-import { editTodoList, TodoEditVariants } from '../helpers/todo.helpers';
+import { editTodoList, getTodosLimited, TodoEditVariants } from '../helpers/todo.helpers';
 import { IResponse } from '../interfaces/response.interfaces';
-import { TodoSortVariants } from '../constants/todo.constants';
+import { TodoPaginationConstants, TodoSortVariants } from '../constants/todo.constants';
 import { RootState } from '../interfaces/store.interfaces';
 
 interface ITodosState {
@@ -66,6 +66,11 @@ export const todosSlice = createSlice({
         const { data } = action.payload;
         state.status = SliceStatuses.succeeded;
         state.list.push(data);
+        if (state.list.length > TodoPaginationConstants.TodoShowLimit) {
+          if (state.allPages === 1) state.allPages += 1;
+
+          state.list = getTodosLimited(state.list);
+        }
       })
       .addCase(addTodoThunk.rejected, (state, action) => {
         state.status = SliceStatuses.failed;

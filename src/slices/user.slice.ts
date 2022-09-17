@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-// eslint-disable-next-line prettier/prettier
 
 import { deleteRequest, getRequest, postRequest } from '../services/request.service';
 import { Endpoints } from '../constants/endpoint.constants';

@@ -9,8 +9,3 @@ export interface IUser {
   profile_picture: string;
   todos: ITodo[];
 }
-
-export interface ILoginUser {
-  email: string;
-  password: string;
-}

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { RegularPopupVariants } from '../constants/componentVariants.constants';
-// eslint-disable-next-line import/no-cycle
+
 import { RootState } from '../interfaces/store.interfaces';
 
 export interface IPopupState {

@@ -13,7 +13,7 @@ export const saveDataToStorage = <T>(stateName: string, value: T, storage: Stora
     const serializedState = isObject(value) ? JSON.stringify(value) : String(value);
     storage.setItem(stateName, serializedState);
   } catch (err) {
-    throw new Error("Can't save changes in local storage");
+    return null;
   }
 };
 
@@ -21,6 +21,6 @@ export const removeDataFromStorage = (stateName: string, storage: Storage = loca
   try {
     storage.removeItem(stateName);
   } catch (err) {
-    throw new Error("Can't save changes in local storage");
+    return null;
   }
 };

@@ -4,7 +4,7 @@ import TodoRow from './todoRow';
 import TodoForm from '../forms/todo.form';
 import { useAppDispatch, useAppSelector } from '../../hooks/store.hooks';
 import { getTodosThunk, selectTodos } from '../../slices/todos.slice';
-import { getLastThree } from '../../helpers/todo.helpers';
+import { getTodosLimited } from '../../helpers/todo.helpers';
 
 export default function TodoContainer() {
   const { list: todoList } = useAppSelector(selectTodos);
@@ -22,8 +22,8 @@ export default function TodoContainer() {
         </div>
 
         <div className="mt-5">
-          <div className="flex flex-col">
-            {getLastThree(todoList)?.map((todo, index) => (
+          <div className="flex flex-col-reverse">
+            {getTodosLimited(todoList).map((todo, index) => (
               <TodoRow data={todo} key={todo.id ?? index} />
             ))}
           </div>

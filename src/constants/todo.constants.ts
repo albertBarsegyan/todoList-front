@@ -13,6 +13,10 @@ export const enum TodoSortVariants {
   CreatedAt = 'created_at',
 }
 
+export const TodoPaginationConstants = {
+  TodoShowLimit: 3,
+};
+
 export const TodoStatuses = [
   { id: 0, text: 'In progress' },
   { id: 1, text: 'Done' },

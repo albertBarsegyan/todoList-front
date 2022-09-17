@@ -1,7 +1,7 @@
 export enum RegularPopupVariants {
-  SUCCESS = 'success',
-  ERROR = 'error',
-  PRIMARY = 'primary',
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+  PRIMARY = 'PRIMARY',
 }
 
 export enum InputVariants {

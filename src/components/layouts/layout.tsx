@@ -22,7 +22,6 @@ export default function Layout({ children }: { children: ReactElement }) {
       logout();
       return;
     }
-
     navigate(RoutePaths.login);
   };
 

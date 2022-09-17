@@ -31,6 +31,7 @@
     "start": "react-scripts start ",
     "build": "react-scripts build",
     "lint": "eslint --fix --ext .ts,.tsx .",
+    "serve": "serve -s build\n",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
