@@ -89,6 +89,10 @@ export function Pagination() {
     }
   };
 
+  if (allPagesNumber <= 1) {
+    return null;
+  }
+
   return (
     <div>
       {allPagesNumber >= PaginationLimit ? (

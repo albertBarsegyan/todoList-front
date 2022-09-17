@@ -25,7 +25,7 @@ const initialState: ITodosState = {
   status: SliceStatuses.idle,
   sortOrder: TodoSortOrders.Asc,
   sortBy: TodoSortVariants.CreatedAt,
-  allPages: 1,
+  allPages: 0,
   page: 0,
   error: '',
 };
@@ -66,8 +66,12 @@ export const todosSlice = createSlice({
         const { data } = action.payload;
         state.status = SliceStatuses.succeeded;
         state.list.push(data);
-        if (state.list.length > TodoPaginationConstants.TodoShowLimit) {
-          if (state.allPages === 1) state.allPages += 1;
+
+        const listLength = state.list.length;
+
+        if (listLength > 0 && listLength % TodoPaginationConstants.TodoShowLimit === 1) {
+          const incrementor = state.allPages === 0 ? 2 : 1;
+          state.allPages += incrementor;
 
           state.list = getTodosLimited(state.list);
         }
@@ -82,6 +86,7 @@ export const todosSlice = createSlice({
       .addCase(getTodosThunk.fulfilled, (state, action) => {
         const { data } = action.payload;
         const { list, page, allPages, sortBy, sortOrder } = data;
+
         state.status = SliceStatuses.succeeded;
         state.list = list;
         state.page = page;
