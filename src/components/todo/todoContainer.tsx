@@ -22,7 +22,7 @@ export default function TodoContainer() {
         </div>
 
         <div className="mt-5">
-          <div className="flex flex-col-reverse">
+          <div className="flex flex-col">
             {getTodosLimited(todoList).map((todo, index) => (
               <TodoRow data={todo} key={todo.id ?? index} />
             ))}
