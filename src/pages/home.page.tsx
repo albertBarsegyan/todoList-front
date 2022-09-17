@@ -1,15 +1,20 @@
-import Layout from '../components/layouts/layout'
-import TodoContainer from '../components/todo/todoContainer'
+import Layout from '../components/layouts/layout';
+import TodoContainer from '../components/todo/todoContainer';
 
-import ProfileDescription from '../profileDescription/profileDescription'
+import ProfileDescription from '../profileDescription/profileDescription';
 
-export default function Home () {
+import { TodoSort } from '../components/todo/todoSort';
+import { Pagination } from '../components/pagination/pagination';
+
+export default function Home() {
   return (
-    <Layout hasLogout>
+    <Layout>
       <>
-        <ProfileDescription/>
-        <TodoContainer/>
+        <ProfileDescription />
+        <TodoSort />
+        <TodoContainer />
+        <Pagination />
       </>
     </Layout>
-  )
+  );
 }

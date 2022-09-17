@@ -1,10 +1,10 @@
-import classNames from 'classnames'
+import classNames from 'classnames';
 
-export default function Spinner ({ isFullScreen }: { isFullScreen: boolean }) {
+export default function Spinner({ isFullScreen = false }: { isFullScreen: boolean }) {
   const iconStyles = classNames({
     'w-full h-screen flex justify-center items-center': isFullScreen,
-    '': !isFullScreen
-  })
+    '': !isFullScreen,
+  });
 
   return (
     <div className={iconStyles}>
@@ -25,9 +25,5 @@ export default function Spinner ({ isFullScreen }: { isFullScreen: boolean }) {
         />
       </svg>
     </div>
-  )
-}
-
-Spinner.defaultProps = {
-  isFullScreen: false
+  );
 }

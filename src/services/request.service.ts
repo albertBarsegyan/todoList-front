@@ -1,24 +1,24 @@
-import axios from './config.service'
+import axios from './config.service';
 
 export const postRequest = async (endpoint: string, data?: any, headers?: any) => {
-  return await axios.post(endpoint, data, {
-    headers
-  })
-}
+  return axios.post(endpoint, data, {
+    headers,
+  });
+};
 
 export const getRequest = async (endpoint: string, headers?: any) => {
-  return await axios.get(endpoint, {
-    headers
-  })
-}
+  return axios.get(endpoint, {
+    headers,
+  });
+};
 
 export const patchRequest = async (endpoint: string, data?: any, headers?: any) => {
-  return await axios.patch(endpoint, data, { headers })
-}
+  return axios.patch(endpoint, data, { headers });
+};
 
 export const deleteRequest = async (endpoint: string, data?: any, headers?: any) => {
-  return await axios.delete(endpoint, {
+  return axios.delete(endpoint, {
     data,
-    headers
-  })
-}
+    headers,
+  });
+};

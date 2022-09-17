@@ -1,16 +1,33 @@
+import { TodoSortVariants } from '../constants/todo.constants';
+
 export enum TodoStatusVariants {
-  'in_progress' = 'in_progress',
-  'done' = 'done',
+  inProgress = 0,
+  done = 1,
 }
 
-interface TodoStatus {
-  name: TodoStatusVariants
-  id: number
+export enum TodoSortOrders {
+  Asc = 'asc',
+  Desc = 'desc',
 }
 
 export interface ITodo {
-  id: number
-  text: string
-  user_id: number
-  status: TodoStatus
+  id: number;
+  createdAt: string;
+  username: string;
+  email: string;
+  text: string;
+  isEdited: number;
+  statusId: number;
+}
+
+export interface ITodoRequest {
+  sortBy: TodoSortVariants;
+  sortOrder: TodoSortOrders;
+  page: number;
+}
+
+export interface ITodoEditRequest {
+  id: number;
+  text?: string;
+  statusId?: number;
 }

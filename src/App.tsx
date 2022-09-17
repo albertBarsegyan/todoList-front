@@ -1,17 +1,13 @@
-import UnauthenticatedApp from './routes/unauthenticatedApp'
-import { useAuth } from './hooks/useAuth'
-import AuthenticatedAppRoutes from './routes/authenticatedApp.routes'
-import Spinner from './components/icons/spinner.icon'
-import React from 'react'
+import React from 'react';
+import { isEmpty } from 'lodash';
+import UnauthenticatedApp from './routes/unauthenticatedApp';
+import { useAuth } from './hooks/useAuth';
+import AuthenticatedAppRoutes from './routes/authenticatedApp.routes';
 
-function App () {
-  const { user, loading } = useAuth()
+function App() {
+  const { user } = useAuth();
 
-  if (loading) {
-    return <Spinner isFullScreen/>
-  }
-
-  return (user !== null) ? <AuthenticatedAppRoutes/> : <UnauthenticatedApp/>
+  return !isEmpty(user) ? <AuthenticatedAppRoutes /> : <UnauthenticatedApp />;
 }
 
-export default App
+export default App;

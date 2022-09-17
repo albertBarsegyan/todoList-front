@@ -1,3 +1,3 @@
-export function isPrimitive (test: any) {
-  return test !== Object(test)
+export function isPrimitive(test: any) {
+  return test !== Object(test);
 }

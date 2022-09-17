@@ -1,3 +1,3 @@
 export const SessionKeys = {
-  user: 'user'
-}
+  user: 'user',
+};

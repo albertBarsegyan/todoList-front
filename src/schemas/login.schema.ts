@@ -1,12 +1,12 @@
-import * as yup from 'yup'
+import * as yup from 'yup';
 
 export const loginFormSchema = yup.object().shape({
-  email: yup
+  username: yup
     .string()
-    .required('Please provide email')
-    .email('Email is not valid'),
+    .required('Please provide username')
+    .min(5),
   password: yup
     .string()
     .required('Please provide password')
-    .min(8, 'Password is too short - should be 8 chars minimum.')
-})
+    .min(8, 'Password is too short - should be 8 chars minimum.'),
+});

@@ -1,16 +1,9 @@
-import React from 'react'
+import React from 'react';
 
-export default function SmileIcon () {
+export default function SmileIcon() {
   return (
     <div>
-      <svg
-        version="1.1"
-        id="Capa_1"
-        xmlns="http://www.w3.org/2000/svg"
-        x="0px"
-        y="0px"
-        viewBox="0 0 387.04 387.04"
-      >
+      <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 387.04 387.04">
         <g>
           <path
             style={{ fill: '#c084fc' }}
@@ -69,5 +62,5 @@ export default function SmileIcon () {
         </g>
       </svg>
     </div>
-  )
+  );
 }

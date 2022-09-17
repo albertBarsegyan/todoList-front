@@ -1,6 +1,6 @@
-import React from 'react'
+import React from 'react';
 
-export default function CheckIcon ({ color }: { color: string }) {
+export default function CheckIcon({ color }: { color?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,9 +12,9 @@ export default function CheckIcon ({ color }: { color: string }) {
     >
       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
     </svg>
-  )
+  );
 }
 
 CheckIcon.defaultProps = {
-  color: '#22c55e'
-}
+  color: '#22c55e',
+};

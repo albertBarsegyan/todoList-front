@@ -1,7 +1,7 @@
-import SmileIcon from '../icons/smile.icon'
+import SmileIcon from '../icons/smile.icon';
 
-export default function Introduction ({ text }: { text: string }) {
-  const contentStyle = 'p-5 shadow-md w-1/3 mt-5 '
+export default function Introduction({ text }: { text: string }) {
+  const contentStyle = 'p-5 shadow-md w-1/3 mt-5 ';
   return (
     <>
       <div className={contentStyle}>
@@ -11,5 +11,5 @@ export default function Introduction ({ text }: { text: string }) {
         <SmileIcon />
       </div>
     </>
-  )
+  );
 }

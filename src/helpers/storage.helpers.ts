@@ -1,40 +1,26 @@
-export const getDataFromStorage = (
-  stateName: string,
-  storage: Storage = localStorage
-) => {
+import { isObject } from 'lodash';
+
+export const getDataFromStorage = (stateName: string, storage: Storage = localStorage) => {
   try {
-    const serializedState = storage.getItem(stateName)
-
-    if (serializedState === null) {
-      return undefined
-    }
-
-    return JSON.parse(serializedState)
+    return storage.getItem(stateName);
   } catch (err) {
-    return undefined
+    return null;
   }
-}
+};
 
-export const saveDataToStorage = <T>(
-  stateName: string,
-  value: T,
-  storage: Storage = localStorage
-) => {
+export const saveDataToStorage = <T>(stateName: string, value: T, storage: Storage = localStorage) => {
   try {
-    const serializedState = JSON.stringify(value)
-    storage.setItem(stateName, serializedState)
+    const serializedState = isObject(value) ? JSON.stringify(value) : String(value);
+    storage.setItem(stateName, serializedState);
   } catch (err) {
-    throw new Error("Can't save changes in local storage")
+    throw new Error("Can't save changes in local storage");
   }
-}
+};
 
-export const removeDataFromStorage = (
-  stateName: string,
-  storage: Storage = localStorage
-) => {
+export const removeDataFromStorage = (stateName: string, storage: Storage = localStorage) => {
   try {
-    storage.removeItem(stateName)
+    storage.removeItem(stateName);
   } catch (err) {
-    throw new Error("Can't save changes in local storage")
+    throw new Error("Can't save changes in local storage");
   }
-}
+};

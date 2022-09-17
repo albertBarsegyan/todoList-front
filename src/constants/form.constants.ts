@@ -1,6 +1,12 @@
 export enum LoginFormFieldNames {
-  email = 'email',
+  username = 'username',
   password = 'password',
+}
+
+export enum TodoFormFieldNames {
+  text = 'text',
+  username = 'username',
+  email = 'email',
 }
 
 export enum RegisterFormFieldNames {

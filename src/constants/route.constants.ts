@@ -1,7 +1,5 @@
 export enum RoutePaths {
-  LOGIN = '/login',
-  REGISTER = '/register',
-  HOME = '/',
-  LOGOUT = '/logout',
-  ERRORPAGE = '/404',
+  login = '/login',
+  home = '/',
+  error = '/404',
 }

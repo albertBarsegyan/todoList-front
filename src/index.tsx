@@ -1,23 +1,24 @@
-import { PopupProvider } from './hooks/usePopup'
+import React from 'react';
 
-import App from './App'
-import { AuthProvider } from './hooks/useAuth'
-import React from 'react'
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-import ReactDOM from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
+import { Provider as ReduxProvider } from 'react-redux';
+import App from './App';
 
-import './styles/index.css'
+import './styles/index.css';
+import { store } from './store';
+import PopupProvider from './components/popups/popupProvider';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <PopupProvider>
-        <AuthProvider>
+      <ReduxProvider store={store}>
+        <PopupProvider>
           <App />
-        </AuthProvider>
-      </PopupProvider>
+        </PopupProvider>
+      </ReduxProvider>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
-)
+  document.getElementById('root'),
+);
