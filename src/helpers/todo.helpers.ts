@@ -1,5 +1,6 @@
 import { ITodo } from '../interfaces/todo.interfaces';
 import { TodoPaginationConstants } from '../constants/todo.constants';
+import { ITodosState } from '../slices/todos.slice';
 
 export enum TodoEditVariants {
   Change = 'Change',
@@ -29,16 +30,22 @@ export const editTodoList = (
   return todoList;
 };
 
-export const getTodosLimited = (firstPageData: ITodo[], newTodo: ITodo) => {
+const checkIsLessThanLimit = (todoLength: number) => todoLength < TodoPaginationConstants.TodoShowLimit;
+
+export const setTodosLimited = (state: ITodosState, newTodo: ITodo) => {
+  const { firstPageData } = state;
   const result = [newTodo];
 
-  const lastPartOfTodos =
-    firstPageData.length <= TodoPaginationConstants.TodoShowLimit
-      ? firstPageData
-      : firstPageData.slice(0, TodoPaginationConstants.TodoShowLimit - 1);
-  result.push(...lastPartOfTodos);
+  const lastPartOfTodos = checkIsLessThanLimit(firstPageData.length)
+    ? firstPageData
+    : firstPageData.slice(0, TodoPaginationConstants.TodoShowLimit - 1);
 
-  return result;
+  result.push(...lastPartOfTodos);
+  state.list = result;
+
+  if (checkIsLessThanLimit(state.list.length)) {
+    state.firstPageData = result;
+  }
 };
 
 export enum TodoPageConverterVariant {

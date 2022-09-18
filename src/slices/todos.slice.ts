@@ -12,12 +12,12 @@ import {
   ITodoRequest,
   TodoSortOrders,
 } from '../interfaces/todo.interfaces';
-import { editTodoList, getTodosLimited, TodoEditVariants } from '../helpers/todo.helpers';
+import { editTodoList, setTodosLimited, TodoEditVariants } from '../helpers/todo.helpers';
 import { IResponse } from '../interfaces/response.interfaces';
 import { TodoSortVariants } from '../constants/todo.constants';
 import { RootState } from '../interfaces/store.interfaces';
 
-interface ITodosState {
+export interface ITodosState {
   list: ITodo[];
   status: SliceStatuses;
   firstPageData: ITodo[];
@@ -81,7 +81,8 @@ export const todosSlice = createSlice({
         state.status = SliceStatuses.succeeded;
         state.page = 0;
         state.allPages = allPages;
-        state.list = getTodosLimited(state.firstPageData, data);
+
+        setTodosLimited(state, data);
       })
 
       .addCase(addTodoThunk.rejected, (state, action) => {
