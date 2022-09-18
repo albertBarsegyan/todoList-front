@@ -33,7 +33,7 @@ export const getTodosLimited = (firstPageData: ITodo[], newTodo: ITodo) => {
   const result = [newTodo];
 
   const lastPartOfTodos =
-    firstPageData.length < TodoPaginationConstants.TodoShowLimit
+    firstPageData.length <= TodoPaginationConstants.TodoShowLimit
       ? firstPageData
       : firstPageData.slice(0, TodoPaginationConstants.TodoShowLimit - 1);
   result.push(...lastPartOfTodos);
