@@ -4,7 +4,7 @@ import { localStorageKeys } from '../constants/localStorage.constants';
 import { getDataFromStorage, removeDataFromStorage, saveDataToStorage } from '../helpers/storage.helpers';
 import { RegularPopupVariants } from '../constants/componentVariants.constants';
 import { useAppDispatch, useAppSelector } from './store.hooks';
-import { getUserThunk, loginUserThunk, logoutUserThunk, selectUser } from '../slices/user.slice';
+import { changeUser, getUserThunk, loginUserThunk, logoutUserThunk, selectUser } from '../slices/user.slice';
 import { SliceStatuses } from '../constants/slice.constants';
 import { ResponseStatus } from '../interfaces/response.interfaces';
 
@@ -30,22 +30,26 @@ export function useAuth() {
   };
 
   const logout = async () => {
-    dispatch(logoutUserThunk()).then(res => {
-      if (res) {
-        removeDataFromStorage(localStorageKeys.userToken);
-      }
-      const isStatusSuccess = res.payload.status === ResponseStatus.Success;
+    const { payload } = await dispatch(logoutUserThunk());
 
-      return {
-        text: message,
-        popupVariant: isStatusSuccess ? RegularPopupVariants.SUCCESS : RegularPopupVariants.ERROR,
-      };
-    });
+    if (payload.status === ResponseStatus.Success) {
+      removeDataFromStorage(localStorageKeys.userToken);
+    }
+
+    const isStatusSuccess = payload.status === ResponseStatus.Success;
+
+    return {
+      text: message,
+      popupVariant: isStatusSuccess ? RegularPopupVariants.SUCCESS : RegularPopupVariants.ERROR,
+    };
   };
 
   useEffect(() => {
     if (tokenFromStorage) {
       dispatch(getUserThunk());
+    }
+    if (!tokenFromStorage) {
+      dispatch(changeUser(null));
     }
   }, [dispatch, tokenFromStorage]);
 

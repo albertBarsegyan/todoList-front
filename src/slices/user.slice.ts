@@ -53,7 +53,12 @@ export const logoutUserThunk = createAsyncThunk(userSliceName('logout'), async (
 export const userSlice = createSlice({
   name: userSliceName(),
   initialState,
-  reducers: {},
+  reducers: {
+    changeUser(state, action) {
+      state.status = SliceStatuses.succeeded;
+      state.data = action.payload;
+    },
+  },
   extraReducers(builder) {
     builder
       .addCase(getUserThunk.pending, state => {
@@ -95,5 +100,6 @@ export const userSlice = createSlice({
 });
 
 export const userReducer = userSlice.reducer;
+export const { changeUser } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
