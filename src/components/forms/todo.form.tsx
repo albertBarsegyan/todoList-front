@@ -1,4 +1,4 @@
-import { FieldValues, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { TodoFormFieldNames } from '../../constants/form.constants';
 import Button from '../buttons/button';
@@ -8,6 +8,8 @@ import { useAppDispatch } from '../../hooks/store.hooks';
 import { addTodoThunk } from '../../slices/todos.slice';
 import { usePopup } from '../../hooks/usePopup';
 import { RegularPopupVariants } from '../../constants/componentVariants.constants';
+import { IAddTodoResponse, ITodoAddRequest } from '../../interfaces/todo.interfaces';
+import { IResponse } from '../../interfaces/response.interfaces';
 
 export default function TodoForm() {
   const dispatch = useAppDispatch();
@@ -17,16 +19,17 @@ export default function TodoForm() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({ resolver: yupResolver(todoSchema), mode: 'onChange' });
+  } = useForm<ITodoAddRequest>({ resolver: yupResolver(todoSchema) });
 
-  const onSubmit = (data: FieldValues) => {
-    dispatch(addTodoThunk(data)).then(({ payload }) => {
+  const onSubmit: SubmitHandler<ITodoAddRequest> = data => {
+    dispatch(addTodoThunk(data)).then(addResponse => {
+      const payload = addResponse.payload as IResponse<IAddTodoResponse>;
       const popupVariant = payload.status === 'error' ? RegularPopupVariants.ERROR : RegularPopupVariants.SUCCESS;
       if (payload.status === 'success') {
         reset();
-      }
 
-      providePopupSettings({ text: payload.message, popupVariant });
+        providePopupSettings({ text: payload.message, popupVariant });
+      }
     });
   };
 

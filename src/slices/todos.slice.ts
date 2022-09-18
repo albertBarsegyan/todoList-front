@@ -4,15 +4,23 @@ import { Endpoints } from '../constants/endpoint.constants';
 import { patchRequest, postRequest } from '../services/request.service';
 import { SliceStatuses } from '../constants/slice.constants';
 
-import { ITodo, ITodoEditRequest, ITodoRequest, TodoSortOrders } from '../interfaces/todo.interfaces';
+import {
+  IAddTodoResponse,
+  ITodo,
+  ITodoAddRequest,
+  ITodoEditRequest,
+  ITodoRequest,
+  TodoSortOrders,
+} from '../interfaces/todo.interfaces';
 import { editTodoList, getTodosLimited, TodoEditVariants } from '../helpers/todo.helpers';
 import { IResponse } from '../interfaces/response.interfaces';
-import { TodoPaginationConstants, TodoSortVariants } from '../constants/todo.constants';
+import { TodoSortVariants } from '../constants/todo.constants';
 import { RootState } from '../interfaces/store.interfaces';
 
 interface ITodosState {
-  list: any[];
+  list: ITodo[];
   status: SliceStatuses;
+  firstPageData: ITodo[];
   page: number;
   allPages: number;
   sortBy: TodoSortVariants;
@@ -22,6 +30,7 @@ interface ITodosState {
 
 const initialState: ITodosState = {
   list: [],
+  firstPageData: [],
   status: SliceStatuses.idle,
   sortOrder: TodoSortOrders.Asc,
   sortBy: TodoSortVariants.CreatedAt,
@@ -35,10 +44,13 @@ export const todoSliceName = (thunkName?: string) => {
   return thunkName ? `${sliceName}/${thunkName}` : sliceName;
 };
 
-export const addTodoThunk = createAsyncThunk(todoSliceName('addTodo'), async (todoData: any) => {
-  const response = await postRequest(Endpoints.todo(), todoData);
-  return response.data;
-});
+export const addTodoThunk = createAsyncThunk(
+  todoSliceName('addTodo'),
+  async (todoData: ITodoAddRequest): Promise<IResponse<IAddTodoResponse>> => {
+    const response = await postRequest(Endpoints.todo(), todoData);
+    return response.data;
+  },
+);
 
 export const editTodoThunk = createAsyncThunk(
   todoSliceName('editTodo'),
@@ -63,19 +75,15 @@ export const todosSlice = createSlice({
         state.status = SliceStatuses.loading;
       })
       .addCase(addTodoThunk.fulfilled, (state, action) => {
-        const { data } = action.payload;
+        const payloadData = action.payload.data;
+        const { data, allPages } = payloadData;
+
         state.status = SliceStatuses.succeeded;
-        state.list.push(data);
-
-        const listLength = state.list.length;
-
-        if (listLength > 0 && listLength % TodoPaginationConstants.TodoShowLimit === 1) {
-          const incrementor = state.allPages === 0 ? 2 : 1;
-          state.allPages += incrementor;
-
-          state.list = getTodosLimited(state.list);
-        }
+        state.page = 0;
+        state.allPages = allPages;
+        state.list = getTodosLimited(state.firstPageData, data);
       })
+
       .addCase(addTodoThunk.rejected, (state, action) => {
         state.status = SliceStatuses.failed;
         state.error = action.error.message;
@@ -84,15 +92,14 @@ export const todosSlice = createSlice({
         state.status = SliceStatuses.loading;
       })
       .addCase(getTodosThunk.fulfilled, (state, action) => {
-        const { data } = action.payload;
-        const { list, page, allPages, sortBy, sortOrder } = data;
+        const payloadData = action.payload.data;
+        const firstPageData = payloadData.page === 0 ? payloadData.list : state.firstPageData;
 
-        state.status = SliceStatuses.succeeded;
-        state.list = list;
-        state.page = page;
-        state.allPages = allPages;
-        state.sortBy = sortBy;
-        state.sortOrder = sortOrder;
+        return {
+          ...payloadData,
+          status: SliceStatuses.succeeded,
+          firstPageData,
+        };
       })
       .addCase(getTodosThunk.rejected, (state, action) => {
         state.status = SliceStatuses.failed;

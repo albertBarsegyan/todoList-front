@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import { useAppDispatch, useAppSelector } from '../../hooks/store.hooks';
 import { getTodosThunk, selectTodos } from '../../slices/todos.slice';
 import { convertTodosPages, TodoPageConverterVariant } from '../../helpers/todo.helpers';
+import { TodoPaginationConstants } from '../../constants/todo.constants';
 
 interface IPageButtonProps {
   pageData: { id: number; text: number };
@@ -14,8 +15,6 @@ interface IPageMoreTenProps {
   handlePage: (pageNumber: number) => () => void;
   currentPage: number;
 }
-
-const PaginationLimit = 10;
 
 const PageButton = ({ pageData, handlePage, currentPage }: IPageButtonProps) => {
   const getPageButtonStyle = (data: { text: number; id: number }) =>
@@ -95,7 +94,7 @@ export function Pagination() {
 
   return (
     <div>
-      {allPagesNumber >= PaginationLimit ? (
+      {allPagesNumber >= TodoPaginationConstants.TodoPagesLimit ? (
         <PagesLisMoreLimit allPagesNumber={allPagesNumber} handlePage={handlePage} currentPage={currentPage} />
       ) : (
         pagesData.map(pageData => {

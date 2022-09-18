@@ -29,10 +29,16 @@ export const editTodoList = (
   return todoList;
 };
 
-export const getTodosLimited = (todolist: ITodo[]) => {
-  return todolist.length > TodoPaginationConstants.TodoShowLimit
-    ? todolist.slice(todolist.length - TodoPaginationConstants.TodoShowLimit)
-    : todolist;
+export const getTodosLimited = (firstPageData: ITodo[], newTodo: ITodo) => {
+  const result = [newTodo];
+
+  const lastPartOfTodos =
+    firstPageData.length < TodoPaginationConstants.TodoShowLimit
+      ? firstPageData
+      : firstPageData.slice(0, TodoPaginationConstants.TodoShowLimit - 1);
+  result.push(...lastPartOfTodos);
+
+  return result;
 };
 
 export enum TodoPageConverterVariant {
@@ -64,12 +70,10 @@ export const convertTodosPages = (
       break;
     }
     case TodoPageConverterVariant.UnderLimit: {
-      firstShowPage = 1;
       lastShowPage = allPagesNumber;
       break;
     }
     default:
-      firstShowPage = 1;
       lastShowPage = allPagesNumber;
   }
 

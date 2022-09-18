@@ -15,6 +15,7 @@ export const enum TodoSortVariants {
 
 export const TodoPaginationConstants = {
   TodoShowLimit: 3,
+  TodoPagesLimit: 10,
 };
 
 export const TodoStatuses = [
